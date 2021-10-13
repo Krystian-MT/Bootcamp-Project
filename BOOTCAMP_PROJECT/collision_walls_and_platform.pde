@@ -1,7 +1,7 @@
 void collisionWP() {
   if (position.x-radius <= 0 || position.x+radius >= width) {
     velocity.x = velocity.x*-1;
-  } else if (position.y-radius <= 0) {
+  } else if (position.y-radius <= 25) {
     velocity.y = velocity.y*-1;
   } else if (position.y-radius >= platform.y-5) {
     if (position.x-radius >= platform.x-35) {

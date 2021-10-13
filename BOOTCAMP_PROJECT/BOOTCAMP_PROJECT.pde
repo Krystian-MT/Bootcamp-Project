@@ -4,22 +4,22 @@ PVector platform;
 float radius;
 boolean inPlay;
 bouncingBall[] bouncingBalls;
-color infectedColour;
-int infected;
+color brokenColour;
+int score;
 Timer timer;
 
 void setup() {
   size(500, 600);
   radius = 5;
-  timer = new Timer();  
-  
-  infected = 0;
-  infectedColour = color(#0DFAA1);
-  bouncingBalls = new bouncingBall[70];
+  timer = new Timer();
+
+  score = 0;
+  brokenColour = color(#333333, 0);
+  bouncingBalls = new bouncingBall[50];
   for (int i=0; i<bouncingBalls.length; i = i+1) {
     bouncingBalls[i] = new bouncingBall();
-    bouncingBalls[i].Bcolour = color(random(20, 70), random(100, 150), random(150, 200));
-    bouncingBalls[i].Bradius = random(6, 20);
+    bouncingBalls[i].Bcolour = color(random(20, 70), random(150, 220), random(80, 130));
+    bouncingBalls[i].Bradius = random(10, 20);
   }
 
   position = new PVector (width/2, height/2+245);
@@ -50,13 +50,19 @@ void draw() {
     ball.moveBouncingBalls();
 
     if (dist(position.x, position.y, ball.Bposition.x, ball.Bposition.y) < radius + ball.Bradius) {
-      if (ball.Bcolour != infectedColour) {
-        ball.Bcolour = infectedColour;
-        infected++;
+      if (!ball.ballBroken) {
+        ball.ballBroken = true;
+        velocity.x = velocity.x*-1;
+        velocity.y = velocity.y*-1;
+
+        ball.Bcolour = brokenColour;
+        score++;
       }
     }
 
     if (inPlay) {
+      bar();
+      score();
       timer.displayTimer();
       moveBall();
 
@@ -67,6 +73,7 @@ void draw() {
 
       collisionWP();
     } else {
+      bar();
       displayC();
 
       stroke(255);
@@ -75,10 +82,8 @@ void draw() {
       fill(#FFFFFF);
       textAlign(CENTER);
       text("click to start", width/2, height/2);
-      
     }
-    if (infected == 70) {
-      noLoop();
+    if (score == 50) {
       fill(#A7A7A7);
       noStroke();
       rect(width/2-100, height/2-30, 200, 100);
@@ -89,6 +94,9 @@ void draw() {
       text("YOU WON!", width/2, height/2);
       inPlay = false;
       restart();
+      score();
+      timer.displayTimer();
+      noLoop();
     }
   }
 }
@@ -107,4 +115,11 @@ void keyPressed() {
   } else if (key == 'e' || key == 'E') {
     exit();
   }
+}
+
+void score() {
+  stroke(1);
+  textSize(20);
+  fill(#FFFFFF);
+  text("Score: "+score, width-40, 20);
 }

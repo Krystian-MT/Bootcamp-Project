@@ -4,11 +4,13 @@ class bouncingBall
   float Bradius;
   PVector Bposition;
   PVector Bvelocity;
+  boolean ballBroken;
 
   bouncingBall()
   {
     Bposition = new PVector(width/2, height/2);
     Bvelocity = new PVector(random(-3, 3), random(-3, 3));
+    ballBroken = false;
   }
 
   void displayBouncingBalls()
@@ -24,7 +26,7 @@ class bouncingBall
     if (Bposition.x-Bradius <= 0 || Bposition.x+Bradius >= width) {
       Bvelocity.x = Bvelocity.x*-1;
     }
-    if (Bposition.y-Bradius <= 0 || Bposition.y+Bradius >= height-100) {
+    if (Bposition.y-Bradius <= 25 || Bposition.y+Bradius >= height-100) {
       Bvelocity.y = Bvelocity.y*-1;
     }
   }
@@ -39,4 +41,9 @@ void displayC() {
 void displayR() {
   fill(#f5f5f5);
   rect(platform.x, platform.y, 70, 10);
+}
+void bar(){
+  noStroke();
+  fill(#555555);
+  rect(0,0,width,25);
 }
